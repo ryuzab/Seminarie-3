@@ -1,0 +1,11 @@
+C:\Users\Ryan\Downloads\RepairElectricBike\src\main\java\se\kth\iv1350\repairebike\controller\Controller.java
+C:\Users\Ryan\Downloads\RepairElectricBike\src\main\java\se\kth\iv1350\repairebike\dto\CustomerData.java
+C:\Users\Ryan\Downloads\RepairElectricBike\src\main\java\se\kth\iv1350\repairebike\dto\SummaryDTO.java
+C:\Users\Ryan\Downloads\RepairElectricBike\src\main\java\se\kth\iv1350\repairebike\integration\CustomerRegistry.java
+C:\Users\Ryan\Downloads\RepairElectricBike\src\main\java\se\kth\iv1350\repairebike\integration\Printer.java
+C:\Users\Ryan\Downloads\RepairElectricBike\src\main\java\se\kth\iv1350\repairebike\integration\RepairOrderRegistry.java
+C:\Users\Ryan\Downloads\RepairElectricBike\src\main\java\se\kth\iv1350\repairebike\model\Customer.java
+C:\Users\Ryan\Downloads\RepairElectricBike\src\main\java\se\kth\iv1350\repairebike\model\RepairOrder.java
+C:\Users\Ryan\Downloads\RepairElectricBike\src\main\java\se\kth\iv1350\repairebike\model\RepairOrderState.java
+C:\Users\Ryan\Downloads\RepairElectricBike\src\main\java\se\kth\iv1350\repairebike\startup\Main.java
+C:\Users\Ryan\Downloads\RepairElectricBike\src\main\java\se\kth\iv1350\repairebike\view\View.java
