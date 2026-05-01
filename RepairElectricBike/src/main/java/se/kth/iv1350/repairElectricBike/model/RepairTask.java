@@ -6,6 +6,8 @@ package se.kth.iv1350.repairElectricBike.model;
 public class RepairTask {
     private final String description;
     private final float cost;
+    public static final float BASE_COST = 500.0f;
+    public static final float ADDITIONAL_COST = 250.0f;
 
     /**
      * Creates a repair task.

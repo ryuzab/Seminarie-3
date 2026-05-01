@@ -18,8 +18,9 @@ public class RepairOrderRegistry {
     }
 
     /**
+     * Generates a new OrderId incrementing from the value of nextOrderId.
      * 
-     * @return generates a new OrderId.
+     * @return The newly generated OrderId.
      */
     public int generateNextOrderId() {
         return nextOrderId++;

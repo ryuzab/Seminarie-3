@@ -43,8 +43,8 @@ public class View {
         // TECHNICIAN
         boolean found = controller.findRepairOrder(orderId);
         if (found == true) {
-            controller.addDiagnostic("Battery connector is damaged.");
-            controller.addTasks(new String[] {"Replace connector", "Test charging", "Update firmware"});
+            controller.addDiagnostic("Battery and it's connector is damaged.");
+            controller.addTasks(new String[] {"Replace connector", "Replace Battery"});
         }
         else {
             System.out.println("Repair order not found.");

@@ -117,10 +117,12 @@ public class Controller {
             return;
         }
         List<RepairTask> tasks = new ArrayList<>();
-        float cost = 500;
+        
+        float currentTaskCost = RepairTask.BASE_COST; 
+        
         for (String description : taskDescriptions) {
-            tasks.add(new RepairTask(description, cost));
-            cost += 250;
+            tasks.add(new RepairTask(description, currentTaskCost));
+            currentTaskCost += RepairTask.ADDITIONAL_COST; 
         }
         currentRepairOrder.addTasks(tasks);
         repairOrderRegistry.updateOrder(currentRepairOrder);
