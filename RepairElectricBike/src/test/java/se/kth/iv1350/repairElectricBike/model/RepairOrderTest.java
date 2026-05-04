@@ -38,7 +38,7 @@ public class RepairOrderTest {
      */
     @Test
     public void testCalculateTotalCost() {
-        order.addTasks(List.of(new RepairTask("Task 1", 100), new RepairTask("Task 2", 200)));
+        order.addTasks(List.of(new RepairTask("Task 1", 300), new RepairTask("Task 2", 300)));
         assertEquals(300, order.calculateTotalCost(), "calculateTotalCost gave incorrect answer.");
     }
 
@@ -47,7 +47,7 @@ public class RepairOrderTest {
      */
     @Test
     public void testAddTasksChangesState() {
-        order.addTasks(List.of(new RepairTask("Task", 100)));
+        order.addTasks(List.of(new RepairTask("Task", 300)));
         assertEquals(RepairOrderState.READY_FOR_APPROVAL, order.getState(), "States not properly changed.");
     }
 }
