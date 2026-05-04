@@ -54,7 +54,7 @@ public class View {
         SummaryDTO summary = controller.getRepairSummary();
         showRepairOrderSummary(summary);
 
-        controller.rejectRepair();
+        controller.acceptRepair();
     }
 
     /**
