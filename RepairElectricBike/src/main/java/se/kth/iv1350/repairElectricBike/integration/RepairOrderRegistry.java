@@ -3,6 +3,8 @@ package se.kth.iv1350.repairElectricBike.integration;
 import java.util.ArrayList;
 import java.util.List;
 
+import se.kth.iv1350.repairElectricBike.model.Bike;
+import se.kth.iv1350.repairElectricBike.model.Customer;
 import se.kth.iv1350.repairElectricBike.model.RepairOrder;
 
 /**
@@ -11,6 +13,7 @@ import se.kth.iv1350.repairElectricBike.model.RepairOrder;
 public class RepairOrderRegistry {
     private final List<RepairOrder> repairOrders = new ArrayList<>();
     private int nextOrderId = 1;
+
     /**
      * Creates an empty repair order registry.
      */
@@ -19,13 +22,21 @@ public class RepairOrderRegistry {
 
     /**
      * Generates a new OrderId incrementing from the value of nextOrderId.
-     * 
-     * @return The newly generated OrderId.
+     * * @return The newly generated OrderId.
      */
-    public int generateNextOrderId() {
+    private int generateNextOrderId() {
         return nextOrderId++;
-}
+    }
 
+    /**
+     * Creates a new order, assigns it an ID, adds it to the registry, and returns the ID.
+     */
+    public int createAndAddOrder(Customer customer, Bike bike, String description) {
+        int newId = generateNextOrderId();
+        RepairOrder newOrder = new RepairOrder(newId, customer, bike, description);
+        addOrder(newOrder);
+        return newId;
+    }
 
     /**
      * Adds a repair order to the registry if it is not already stored.
@@ -34,7 +45,8 @@ public class RepairOrderRegistry {
      */
     public void addOrder(RepairOrder repairOrder) {
         if (findOrder(repairOrder.getId()) == null) {
-            repairOrders.add(repairOrder);
+            // Store a defensive copy
+            repairOrders.add(new RepairOrder(repairOrder));
         }
     }
 
@@ -42,12 +54,13 @@ public class RepairOrderRegistry {
      * Finds one specific repair order by id.
      *
      * @param orderId Repair order id.
-     * @return Matching repair order, or null if no order was found.
+     * @return A copy of the matching repair order, or null if no order was found.
      */
     public RepairOrder findOrder(int orderId) {
         for (RepairOrder repairOrder : repairOrders) {
             if (repairOrder.getId() == orderId) {
-                return repairOrder;
+                // Return a defensive copy
+                return new RepairOrder(repairOrder);
             }
         }
         return null;
@@ -61,7 +74,8 @@ public class RepairOrderRegistry {
     public void updateOrder(RepairOrder repairOrder) {
         for (int i = 0; i < repairOrders.size(); i++) {
             if (repairOrders.get(i).getId() == repairOrder.getId()) {
-                repairOrders.set(i, repairOrder);
+                // Replace with a fresh copy
+                repairOrders.set(i, new RepairOrder(repairOrder));
                 return;
             }
         }
@@ -78,7 +92,8 @@ public class RepairOrderRegistry {
         List<RepairOrder> matches = new ArrayList<>();
         for (RepairOrder repairOrder : repairOrders) {
             if (repairOrder.getCustomer().getPhoneNumber().equals(phoneNumber)) {
-                matches.add(repairOrder);
+                // Add defensive copies to the returned list
+                matches.add(new RepairOrder(repairOrder));
             }
         }
         return matches;

@@ -23,7 +23,6 @@ public class Controller {
     private final CustomerRegistry customerRegistry;
     private final Date date;
     private final Printer printer;
-    private RepairOrder currentRepairOrder;
 
     /**
      * Creates a controller.
@@ -57,9 +56,7 @@ public class Controller {
                 bike.getBrand(), bike.getModel(), bike.getSerialNumber());
     }
 
-
-    /** 
-     * Starts a new repair order for a customer.
+    /** * Starts a new repair order for a customer.
      *
      * @param phoneNumber Customer phone number.
      * @param description Customer's problem description.
@@ -71,98 +68,99 @@ public class Controller {
             return -1;
         }
         
-        int newId = repairOrderRegistry.generateNextOrderId();
-        
-        // The description is required to create the object
-        currentRepairOrder = new RepairOrder(newId, customer, customer.getBike(), description);
-        repairOrderRegistry.addOrder(currentRepairOrder);
-        
-        return currentRepairOrder.getId();
+        // Pass creation responsibility to the registry
+        return repairOrderRegistry.createAndAddOrder(customer, customer.getBike(), description);
     }
 
     /**
-     * Finds one specific repair order by id and makes it the current repair order.
+     * Checks if a repair order exists in the registry.
      *
      * @param orderId Repair order id.
      * @return true if the repair order was found, otherwise false.
      */
     public boolean findRepairOrder(int orderId) {
-        RepairOrder foundOrder = repairOrderRegistry.findOrder(orderId);
-        if (foundOrder == null) {
-            return false;
-        }
-        currentRepairOrder = foundOrder;
-        return true;
+        return repairOrderRegistry.findOrder(orderId) != null;
     }
 
     /**
-     * Adds a technician diagnostic report to the current repair order.
+     * Adds a technician diagnostic report to the specified repair order.
      *
+     * @param orderId Repair order id.
      * @param report Diagnostic report.
      */
-    public void addDiagnostic(String report) {
-        if (currentRepairOrder != null) {
-            currentRepairOrder.addDiagnostic(report);
-            repairOrderRegistry.updateOrder(currentRepairOrder);
+    public void addDiagnostic(int orderId, String report) {
+        RepairOrder order = repairOrderRegistry.findOrder(orderId);
+        if (order != null) {
+            order.addDiagnostic(report);
+            repairOrderRegistry.updateOrder(order);
         }
     }
 
     /**
-     * Adds repair tasks to the current repair order and stores the updated order in the registry.
+     * Adds repair tasks to the specified repair order and stores the updated order in the registry.
      *
+     * @param orderId Repair order id.
      * @param taskDescriptions Task descriptions.
      */
-    public void addTasks(String[] taskDescriptions) {
-        if (currentRepairOrder == null) {
+    public void addTasks(int orderId, String[] taskDescriptions) {
+        RepairOrder order = repairOrderRegistry.findOrder(orderId);
+        if (order == null) {
             return;
         }
-        List<RepairTask> tasks = new ArrayList<>();
         
+        List<RepairTask> tasks = new ArrayList<>();
         float currentTaskCost = RepairTask.BASE_COST; 
         
         for (String description : taskDescriptions) {
             tasks.add(new RepairTask(description, currentTaskCost));
             currentTaskCost += RepairTask.ADDITIONAL_COST; 
         }
-        currentRepairOrder.addTasks(tasks);
-        repairOrderRegistry.updateOrder(currentRepairOrder);
+        order.addTasks(tasks);
+        repairOrderRegistry.updateOrder(order);
     }
 
     /**
-     * Gets a summary for the current repair order.
+     * Gets a summary for the specified repair order.
      *
-     * @return Repair summary, or null if there is no current repair order.
+     * @param orderId Repair order id.
+     * @return Repair summary, or null if there is no matching repair order.
      */
-    public SummaryDTO getRepairSummary() {
-        if (currentRepairOrder == null) {
+    public SummaryDTO getRepairSummary(int orderId) {
+        RepairOrder order = repairOrderRegistry.findOrder(orderId);
+        if (order == null) {
             return null;
         }
+        
         List<String> taskTexts = new ArrayList<>();
-        for (RepairTask task : currentRepairOrder.getTasks()) {
+        for (RepairTask task : order.getTasks()) {
             taskTexts.add(task.toString());
         }
-        return new SummaryDTO(currentRepairOrder.getId(), currentRepairOrder.getProblemDescription(),
-                currentRepairOrder.getDiagnosticReport(), taskTexts, currentRepairOrder.calculateTotalCost());
+        return new SummaryDTO(order.getId(), order.getProblemDescription(),
+                order.getDiagnosticReport(), taskTexts, order.calculateTotalCost());
     }
 
     /**
-     * Accepts the current repair order and prints it.
+     * Accepts the specified repair order and prints it.
+     * * @param orderId Repair order id.
      */
-    public void acceptRepair() {
-        if (currentRepairOrder != null) {
-            currentRepairOrder.changeState(RepairOrderState.ACCEPTED);
-            repairOrderRegistry.updateOrder(currentRepairOrder);
-            printer.print(currentRepairOrder);
+    public void acceptRepair(int orderId) {
+        RepairOrder order = repairOrderRegistry.findOrder(orderId);
+        if (order != null) {
+            order.changeState(RepairOrderState.ACCEPTED);
+            repairOrderRegistry.updateOrder(order);
+            printer.print(order);
         }
     }
 
     /**
-     * Rejects the current repair order.
+     * Rejects the specified repair order.
+     * * @param orderId Repair order id.
      */
-    public void rejectRepair() {
-        if (currentRepairOrder != null) {
-            currentRepairOrder.changeState(RepairOrderState.REJECTED);
-            repairOrderRegistry.updateOrder(currentRepairOrder);
+    public void rejectRepair(int orderId) {
+        RepairOrder order = repairOrderRegistry.findOrder(orderId);
+        if (order != null) {
+            order.changeState(RepairOrderState.REJECTED);
+            repairOrderRegistry.updateOrder(order);
         }
     }
 

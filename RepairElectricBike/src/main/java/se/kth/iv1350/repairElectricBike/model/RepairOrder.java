@@ -25,13 +25,27 @@ public class RepairOrder {
      * @param problemDescription Customer's problem description.
      */
     public RepairOrder(int id, Customer customer, Bike bike, String problemDescription) {
-    this.id = id;
-    this.customer = customer;
-    this.bike = bike;
-    this.problemDescription = problemDescription;
-    this.state = RepairOrderState.NEWLY_CREATED;
-    this.diagnosticReport = "";
-}
+        this.id = id;
+        this.customer = customer;
+        this.bike = bike;
+        this.problemDescription = problemDescription;
+        this.state = RepairOrderState.NEWLY_CREATED;
+        this.diagnosticReport = "";
+    }
+
+    /**
+     * Copy constructor for creating defensive copies.
+     * * @param other The RepairOrder to copy.
+     */
+    public RepairOrder(RepairOrder other) {
+        this.id = other.id;
+        this.customer = other.customer;
+        this.bike = other.bike;
+        this.problemDescription = other.problemDescription;
+        this.diagnosticReport = other.diagnosticReport;
+        this.state = other.state;
+        this.tasks.addAll(other.tasks);
+    }
 
     /** @return Repair order id. */
     public int getId() { return id; }

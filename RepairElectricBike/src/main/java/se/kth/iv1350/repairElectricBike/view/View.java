@@ -34,27 +34,27 @@ public class View {
         }
         System.out.println("Customer data:");
         System.out.println(customerData);
-
     
         int orderId = controller.startRepairOrder("0701234567", "Battery does not charge.");
         System.out.println("Created repair order id: " + orderId);
 
-
         // TECHNICIAN
         boolean found = controller.findRepairOrder(orderId);
-        if (found == true) {
-            controller.addDiagnostic("Battery and it's connector is damaged.");
-            controller.addTasks(new String[] {"Replace connector", "Replace Battery"});
-        }
-        else {
+        if (found) {
+            // Pass orderId to controller methods
+            controller.addDiagnostic(orderId, "Battery and it's connector is damaged.");
+            controller.addTasks(orderId, new String[] {"Replace connector", "Replace Battery"});
+        } else {
             System.out.println("Repair order not found.");
         }
         
         // RECEPTIONIST
-        SummaryDTO summary = controller.getRepairSummary();
-        showRepairOrderSummary(summary);
+        SummaryDTO summary = controller.getRepairSummary(orderId);
+        if (summary != null) {
+            showRepairOrderSummary(summary);
+        }
 
-        controller.acceptRepair();
+        controller.acceptRepair(orderId);
     }
 
     /**
